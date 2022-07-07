@@ -23,10 +23,10 @@ You must have Visual Studio installed to run the project
 
 ## Run Locally
 
-Clone the project
+Donwload the project
 
 ```bash
-  git clone https://github.com/mehraTusharRevclerx/Atm_System_Console_Application
+  Download From https://github.com/mehraTusharRevclerx/Atm_System_Console_Application
 ```
 
 Go to the project directory
