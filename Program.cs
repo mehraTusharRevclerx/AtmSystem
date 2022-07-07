@@ -134,26 +134,6 @@ namespace AtmSystem
                 }
             }
 
-
-
-
-
-            //if (currUser.PreviousTrans.Count <= 0)
-            //{
-            //Console.WriteLine("You Dont Have Any Transitons yet");
-            //}
-            //else
-            //{
-
-            //    foreach (string i in currUser.PreviousTrans)
-            //    {
-            //        Console.WriteLine(i);
-            //    }
-
-            //}
-
-
-            //Console.WriteLine(currUser.PreviousTrans);
         }
         static void CashAvailability(CardHolder currUser)
         {
