@@ -38,7 +38,7 @@ namespace AtmSystem
                 inputCardNum = Console.ReadLine();
             }
 
-            CardHolder currUser = cardHolders.FirstOrDefault(x => x.CardNum == long.Parse(inputCardNum));
+            CardHolder currUser = cardHolders.FirstOrDefault(x => ((IUser)x).CardNum == long.Parse(inputCardNum));
             while (currUser == null)
             {
                 Console.WriteLine("Card Number Does Not Match Please Reenter");
@@ -54,12 +54,12 @@ namespace AtmSystem
                 inputCardPin = Console.ReadLine();
             }
 
-            while (currUser.CardPin != int.Parse(inputCardPin))
+            while (((IUser)currUser).CardPin != int.Parse(inputCardPin))
             {
                 Console.WriteLine("Card Pin Does Not Match Please Reenter");
                 goto returnToCardPin;
             }
-            Console.WriteLine($"Welcome To Instamoney {currUser.CardName}");
+            Console.WriteLine($"Welcome To Instamoney {((IUser)currUser).CardName}");
             int option = 0;
             do
             {
@@ -76,25 +76,28 @@ namespace AtmSystem
                 switch (option)
                 {
                     case 1:
-                        CashAvailability(currUser);
+                        CashDeposit(currUser);
                         break;
                     case 2:
-                        PrevFiveTrans(currUser);
+                        CashAvailability(currUser);
                         break;
                     case 3:
-                        CashWithdrawal(currUser);
+                        PrevFiveTrans(currUser);
                         break;
                     case 4:
-                        FastCashWithdrawal(currUser);
+                        CashWithdrawal(currUser);
                         break;
                     case 5:
-                        PinChanger.ChangePin(currUser);
+                        FastCashWithdrawal(currUser);
                         break;
                     case 6:
+                        PinChanger.ChangePin(currUser);
+                        break;
+                    case 7:
                         Cancel();
                         break;
                 }
-            } while (option != 6);
+            } while (option != 7);
         }
         static void PrevFiveTrans(CardHolder currUser)
         {
@@ -154,14 +157,14 @@ namespace AtmSystem
         }
         static void CashAvailability(CardHolder currUser)
         {
-            if (currUser.CashAvailability >= 0)
+            if (((IinstaMoney)currUser).CashAvailability >= 0)
             {
-                Console.WriteLine($"Yes Cash is Avalibale Total Cash {currUser.CashAvailability}");
+                Console.WriteLine($"Yes Cash is Avalibale Total Cash {((IinstaMoney)currUser).CashAvailability}");
 
             }
             else
             {
-                Console.WriteLine($"sorry No Cash is Avalibale Total Cash {currUser.CashAvailability}");
+                Console.WriteLine($"sorry No Cash is Avalibale Total Cash {((IinstaMoney)currUser).CashAvailability}");
             }
         }
         static void Cancel()
@@ -172,10 +175,10 @@ namespace AtmSystem
         }
         static void CashWithdrawal(CardHolder currUser)
         {
-            if (currUser.Count != 10)
+            if (((IUser)currUser).Count != 10)
             {
 
-                Console.WriteLine($"Your Current Balance is{currUser.CardBalance}");
+                Console.WriteLine($"Your Current Balance is{((IUser)currUser).CardBalance}");
                 Console.WriteLine($"How Much Cash You Want To Withdrawal: ");
             returnToWithdrawals:
                 string Withdrawals = Console.ReadLine();
@@ -192,7 +195,7 @@ namespace AtmSystem
                     goto returnToWithdrawals;
 
                 }
-                if (Math.Abs(Withdrawal) > currUser.CardBalance || Math.Abs(Withdrawal) > currUser.CashAvailability)
+                if (Math.Abs(Withdrawal) > ((IUser)currUser).CardBalance || Math.Abs(Withdrawal) > ((IinstaMoney)currUser).CashAvailability)
                 {
                     Console.WriteLine($"Not Enough Balance Please Renter The Amount: ");
                     goto returnToWithdrawals;
@@ -201,11 +204,11 @@ namespace AtmSystem
                 currUser.CardWithdrawal(Math.Abs(Withdrawal));
                 currUser.PreviousTrans.Add($"Cash Withdrawal: {Math.Abs(Withdrawal)}");
 
-                currUser.Count++;
+                ((IUser)currUser).Count++;
 
 
-                Console.WriteLine("Count " + currUser.Count);
-                Console.WriteLine($"Thank You for Withdrawing Money \nNow Your Current Balance is {currUser.CardBalance}");
+                Console.WriteLine("Count " + ((IUser)currUser).Count);
+                Console.WriteLine($"Thank You for Withdrawing Money \nNow Your Current Balance is {((IUser)currUser).CardBalance}");
             }
             else
             {
@@ -217,11 +220,11 @@ namespace AtmSystem
 
         static void FastCashWithdrawal(CardHolder currUser)
         {
-            if (currUser.Count != 10)
+            if (((IUser)currUser).Count != 10)
             {
 
 
-                Console.WriteLine($"Your Current Balance is{currUser.CardBalance}");
+                Console.WriteLine($"Your Current Balance is{((IUser)currUser).CardBalance}");
                 Console.WriteLine($"Please Choose Correct Option for Fast Cash Withdrawal\n1.500\n2.1000\n3.2000");
             returnToFastWithdrawals:
                 int Withdrawal;
@@ -254,7 +257,7 @@ namespace AtmSystem
                     Console.WriteLine($"Please Enter Correct input");
                     goto returnToFastWithdrawals;
                 }
-                if (Math.Abs(Withdrawal) > currUser.CardBalance || Math.Abs(Withdrawal) > currUser.CashAvailability)
+                if (Math.Abs(Withdrawal) > ((IUser)currUser).CardBalance || Math.Abs(Withdrawal) > ((IinstaMoney)currUser).CashAvailability)
                 {
                     Console.WriteLine($"Not Enough Balance Please Renter The Amount: ");
                     goto returnToFastWithdrawals;
@@ -262,8 +265,8 @@ namespace AtmSystem
 
                 currUser.CardWithdrawal(Math.Abs(Withdrawal));
                 currUser.PreviousTrans.Add($"Fast Cash Withdrawal: {Math.Abs(Withdrawal)}");
-                currUser.Count++;
-                Console.WriteLine($"Thank You for Withdrawing Money \nNow Your Current Balance is {currUser.CardBalance}");
+                ((IUser)currUser).Count++;
+                Console.WriteLine($"Thank You for Withdrawing Money \nNow Your Current Balance is {((IUser)currUser).CardBalance}");
             }
             else
             {
@@ -272,10 +275,21 @@ namespace AtmSystem
         }
         static void PrintOption()
         {
-            Console.WriteLine("\nNow Please Choose the Following Options:\n1.Cash availability\n2.Previous five transactions\n3.Cash withdrawal\n4.Fast Withdrawal\n5.Change Pin\n6.Cancel");
+            Console.WriteLine("\nNow Please Choose the Following Options:\n1.Cash Deposit\n2.Cash availability\n3.Previous five transactions\n4.Cash withdrawal\n5.Fast Withdrawal\n6.Change Pin\n7.Cancel");
         }
 
+        static void CashDeposit(CardHolder currUser)
+        {
+            Console.WriteLine("How much cash Do You Want To Deposit");
+            string cashDepositInput = Console.ReadLine();
+            double cashDeposit;
+            while (!double.TryParse(cashDepositInput, out cashDeposit))
+            {
+                cashDepositInput = Console.ReadLine();
+            }
 
+            currUser.CashDeposit(cashDeposit);
+        }
         public static bool NumberValid(string inputString)
         {
             bool isValid = true;

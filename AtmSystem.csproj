@@ -44,6 +44,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CardHolder.cs" />
+    <Compile Include="IinstaMoney.cs" />
+    <Compile Include="Iuser.cs" />
     <Compile Include="PinChanger.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

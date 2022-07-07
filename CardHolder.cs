@@ -6,83 +6,78 @@ using System.Threading.Tasks;
 
 namespace AtmSystem
 {
-    public class CardHolder
+    public class CardHolder : IinstaMoney, IUser
     {
         List<string> previousTrans = new List<string>();
         private long cardNum;
-        public long CardNum
+        long IUser.CardNum
         {
             get => cardNum;
             set => cardNum = value;
         }
-
         private int count;
-        public int Count
+        int IUser.Count
         {
             get => count;
             set => count = value;
         }
         private int cardPin;
-        public long CardPin
+        long IUser.CardPin
         {
             get => cardPin;
             set => cardPin = (int)value;
         }
         private string cardName;
-
-        public string CardName
+        string IUser.CardName
         {
             get => cardName;
             set => cardName = value;
         }
         private double cardBalance;
-        public double CardBalance
+        double IUser.CardBalance
         {
             get => cardBalance;
             set => cardBalance = value;
         }
         private int cashAvailability;
-        public int CashAvailability
+        int IinstaMoney.CashAvailability
         {
             get => cashAvailability;
             set => cashAvailability = value;
         }
         public List<string> PreviousTrans { get => previousTrans; set => previousTrans = value; }
-
-
         public CardHolder(string cardName, long cardNum, int cardPin, double cardBalance)
         {
-            CardNum = cardNum;
-            CardPin = cardPin;
-            CardName = cardName;
-            CardBalance = cardBalance;
-            CashAvailability = 20000;
+            ((IUser)this).CardNum = cardNum;
+            ((IUser)this).CardPin = cardPin;
+            ((IUser)this).CardName = cardName;
+            ((IUser)this).CardBalance = cardBalance;
+            ((IinstaMoney)this).CashAvailability = 20000;
             count = 0;
         }
-
         public CardHolder()
         {
-            CardNum = 0;
-            CardPin = 0;
-            CardName = "No Name";
-            CardBalance = 0;
-            CashAvailability = 20000;
+            ((IUser)this).CardNum = 0;
+            ((IUser)this).CardPin = 0;
+            ((IUser)this).CardName = "No Name";
+            ((IUser)this).CardBalance = 0;
+            ((IinstaMoney)this).CashAvailability = 20000;
             count = 0;
         }
-
         public void CardWithdrawal(int Withdrawal)
         {
-            CardBalance -= Withdrawal;
-            CashAvailability -= Withdrawal;
+            ((IUser)this).CardBalance -= Withdrawal;
+            ((IinstaMoney)this).CashAvailability -= Withdrawal;
         }
-
         public void ChangePass(int pass)
         {
-            CardPin = pass;
+            ((IUser)this).CardPin = pass;
         }
-
-
-
-
+        public void CashDeposit(double deposit)
+        {
+            ((IUser)this).CardBalance += deposit;
+            Console.WriteLine($"Thank You\nYour {deposit} Rupees Has Been Deposit");
+            Console.WriteLine($"Now Your Current Balance is: {this.cardBalance}");
+        }
     }
 }

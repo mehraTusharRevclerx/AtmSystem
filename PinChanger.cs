@@ -39,7 +39,7 @@ namespace AtmSystem
                 passInput = Console.ReadLine();
             }
 
-            while (int.Parse(passInput) != currUser.CardPin)
+            while (int.Parse(passInput) != ((IUser)currUser).CardPin)
             {
                 Console.WriteLine("your Pin Do not match");
                 goto returnToPass;
@@ -54,9 +54,9 @@ namespace AtmSystem
             }
 
 
-            Console.WriteLine($"Your Password Has Been Changed SuccessFully\nPrevious Password: {currUser.CardPin}");
+            Console.WriteLine($"Your Password Has Been Changed SuccessFully\nPrevious Password: {((IUser)currUser).CardPin}");
             currUser.ChangePass(int.Parse(NewpassInput));
-            Console.WriteLine($"New Password: {currUser.CardPin}");
+            Console.WriteLine($"New Password: {((IUser)currUser).CardPin}");
 
 
 
